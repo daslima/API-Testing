@@ -1,0 +1,487 @@
+{
+	"info": {
+		"_postman_id": "49ba19b5-4d79-4378-985a-8fea29b89878",
+		"name": "dummyJSON",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12970079"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "getToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv();\r",
+									"\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.token);\r",
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"    let request_schema = request.name + '_schema';\r",
+									"    const test = ajv.compile(JSON.parse(pm.environment.get(request_schema)));\r",
+									"    const isValid = test(jsonData);\r",
+									"\r",
+									"    if(!isValid)\r",
+									"        throw Error(JSON.stringify(test.errors));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "getAllProducts",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv();\r",
+									"\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"    let request_schema = request.name + '_schema';\r",
+									"    const test = ajv.compile(JSON.parse(pm.environment.get(request_schema)));\r",
+									"    const isValid = test(jsonData);\r",
+									"\r",
+									"    if(!isValid)\r",
+									"        throw Error(JSON.stringify(test.errors));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSingleProduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv();\r",
+									"\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"    let request_schema = request.name + '_schema';\r",
+									"    const test = ajv.compile(JSON.parse(pm.environment.get(request_schema)));\r",
+									"    const isValid = test(jsonData);\r",
+									"\r",
+									"    if(!isValid)\r",
+									"        throw Error(JSON.stringify(test.errors));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "searchProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/search?q=perfume",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "perfume"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "limitAndSkipProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products?limit=10&skip=10&select=title,price",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "skip",
+									"value": "10"
+								},
+								{
+									"key": "select",
+									"value": "title,price"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCategories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv();\r",
+									"\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"    let request_schema = request.name + '_schema';\r",
+									"    const test = ajv.compile(JSON.parse(pm.environment.get(request_schema)));\r",
+									"    const isValid = test(jsonData);\r",
+									"\r",
+									"    if(!isValid)\r",
+									"        throw Error(JSON.stringify(test.errors));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/categories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProductsOfCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/category/smartphones",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"category",
+								"smartphones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addProduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv();\r",
+									"\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"    let request_schema = request.name + '_schema';\r",
+									"    const test = ajv.compile(JSON.parse(pm.environment.get(request_schema)));\r",
+									"    const isValid = test(jsonData);\r",
+									"\r",
+									"    if(!isValid)\r",
+									"        throw Error(JSON.stringify(test.errors));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{title}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateProduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{title}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteProduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Should response has status code 200', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Http Response",
+			"item": [
+				{
+					"name": "customHtppResponse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Should response has status code 404', () => {\r",
+									"    pm.expect(pm.response.code).to.be.eq(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Valid message body', () => {\r",
+									"    const message = \"Hello_Peter\";\r",
+									"    pm.expect(jsonData.message).to.be.eq(message);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/http/404/Hello_Peter",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"http",
+								"404",
+								"Hello_Peter"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
