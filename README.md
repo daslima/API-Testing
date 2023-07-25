@@ -17,7 +17,7 @@ git clone https://github.com/daslima/API-Testing
 cd API-Testing
 ```
 
-## ⚙️ Executando os testes
+## ⚙️ Running the tests
 
 No report
 ```
