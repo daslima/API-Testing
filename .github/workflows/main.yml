@@ -35,7 +35,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Step 3 Execute collection
-        run: newman run ./dummyJSON.postman_collection.json -e ./dummyEnvironment.postman_environment.json --reporters cli, -r htmlextra --reporter-htmlextra-export ./index.html
+        run: newman run ./dummyJSON.postman_collection.json -e ./dummyEnvironment.postman_environment.json --reporters cli, -r htmlextra
 
       # Runs a set of commands using the runners shell
       - name: Step 4 Archive Production artifacts
