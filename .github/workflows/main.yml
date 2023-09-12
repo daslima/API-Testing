@@ -35,4 +35,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Step 3 Execute collection
-        run: newman run ./dummyJSON.postman_collection.json -e ./dummyEnvironment.postman_environment.json
+        run: newman run ./dummyJSON.postman_collection.json -e ./dummyEnvironment.postman_environment.json --reporters cli, -r htmlextra --reporter-htmlextra-export ./index.html
